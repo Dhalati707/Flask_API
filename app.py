@@ -1,9 +1,14 @@
 from flask import Flask, request, jsonify
 from transformers import BertForSequenceClassification, BertTokenizerFast
 from transformers import pipeline
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
 import pyarabic  # For Arabic text normalization
 from pathlib import Path
 import os
+
+# Load model directly
+
 # import jieba  # Optional for word segmentation
 
 app = Flask(__name__)
@@ -14,8 +19,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Load the pre-trained model and tokenizer
 model_path = "C:/Users/asala/OneDrive/Desktop/Model/model"
 tokenizer_path =  "C:/Users/asala/OneDrive/Desktop/Model/tokenizer"
-model = BertForSequenceClassification.from_pretrained(model_path)
-tokenizer = BertTokenizerFast.from_pretrained(tokenizer_path)
+
+tokenizer = AutoTokenizer.from_pretrained("Dhalati707/FlaskModel")
+model = AutoModelForSequenceClassification.from_pretrained("Dhalati707/FlaskModel")
+
 nlp = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer)
 
 # Define a list of Arabic prepositions to be ignored
