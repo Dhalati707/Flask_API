@@ -20,8 +20,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 model_path = "C:/Users/asala/OneDrive/Desktop/Model/model"
 tokenizer_path =  "C:/Users/asala/OneDrive/Desktop/Model/tokenizer"
 
-tokenizer = AutoTokenizer.from_pretrained("Dhalati707/FlaskModel")
+tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
 model = AutoModelForSequenceClassification.from_pretrained("Dhalati707/FlaskModel")
+
+
 
 nlp = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer)
 
