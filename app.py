@@ -18,7 +18,7 @@ output_model_dir = '/content/gk/kk/ColabNotebooks/'
 BASE_DIR = Path(__file__).resolve().parent.parent
 # Load the pre-trained model and tokenizer
 model_path = "C:/Users/asala/OneDrive/Desktop/Model/model"
-tokenizer_path =  "C:/Users/asala/OneDrive/Desktop/Model/tokenizer"
+tokenizer_path =  "./tokenizer"
 
 tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
 model = AutoModelForSequenceClassification.from_pretrained("Dhalati707/FlaskModel")
