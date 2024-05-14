@@ -20,8 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 model_path = "C:/Users/asala/OneDrive/Desktop/Model/model"
 tokenizer_path =  "./tokenizer"
 
-tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
-model = AutoModelForSequenceClassification.from_pretrained("Dhalati707/FlaskModel")
+tokenizer = AutoTokenizer.from_pretrained(tokenizer_path, force_download=True)
+model = AutoModelForSequenceClassification.from_pretrained("Dhalati707/FlaskModel", force_download=True)
 
 
 
