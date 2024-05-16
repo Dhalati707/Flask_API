@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import pyarabic.araby
 from transformers import BertForSequenceClassification, BertTokenizerFast
 from transformers import pipeline
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -20,8 +21,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 model_path = "C:/Users/asala/OneDrive/Desktop/Model/model"
 tokenizer_path =  "./tokenizer"
 
-tokenizer = AutoTokenizer.from_pretrained(tokenizer_path, force_download=True)
-model = AutoModelForSequenceClassification.from_pretrained("Dhalati707/FlaskModel", force_download=True)
+tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
+
+model = AutoModelForSequenceClassification.from_pretrained("Dhalati707/FlaskModel")
 
 
 
@@ -43,7 +45,10 @@ def remove_prefixes_suffixes(text):
   """
 
   # Normalize Arabic text (remove diacritics, fix kasra ta marbuta, etc.)
-  normalized_text = pyarabic.normalize(text)
+  # normalized_text = pyarabic.normalize(text)
+
+  normalized_text = pyarabic.araby.strip_tashkeel(text)  # This strips diacritics as an example of normalization
+  print(normalized_text)
 
   # Segment text into words (optional, comment out if not needed)
   # segmented_text = jieba.cut(normalized_text)
@@ -98,18 +103,25 @@ def analyze_sentence(sentence):
   return word_sentiments
 
 
-@app.route('/sentiment-analysis', methods=['POST'])
+@app.route('/', methods=['GET'])
 def sentiment_analysis():
   # Check if file is present in the request
-  if 'file' not in request.files:
-    return jsonify({'error': 'No file provided'}), 400
+  # if 'text' not in request.files:
+  #   return jsonify({'error': 'No file provided'}), 400
+
+  query_params = request.args
+  request_text = query_params.get("text")
+  if not request_text:
+      return jsonify({'error': 'No text provided'}), 400
+
+
 
   # Read text from file
-  file = request.files['file']
-  text = file.read().decode("utf-8")
+  # file = request.files['file']
+  # text = file.read().decode("utf-8")
 
   # Perform sentiment analysis on the text after converting words to base form
-  word_sentiments = analyze_sentence(text)
+  word_sentiments = analyze_sentence(request_text)
 
   # Concatenate the labels of relevant words into one line
   labels_line = ' '.join(sentiment['label'] for _, sentiment in word_sentiments)
@@ -119,4 +131,4 @@ def sentiment_analysis():
 
 
 if __name__ == '__main__':
-  app.run(debug=False, port=5000)
+  app.run(debug=False)
