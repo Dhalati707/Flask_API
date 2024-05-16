@@ -113,7 +113,7 @@ def sentiment_analysis():
   request_text = query_params.get("text")
   if not request_text:
       # return jsonify({'error': 'No text provided'}), 400
-      return 200
+      return jsonify({'success': 'Connection Successful'}), 200
 
 
   # Read text from file
