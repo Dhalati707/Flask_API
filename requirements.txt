@@ -1,4 +1,5 @@
 absl-py==2.1.0
+accelerate==0.30.1
 blinker==1.8.2
 certifi==2024.2.2
 charset-normalizer==3.3.2
@@ -11,7 +12,6 @@ filelock==3.14.0
 Flask==3.0.3
 flax==0.8.3
 fsspec==2024.3.1
-gunicorn==20.1.0
 huggingface-hub==0.23.0
 idna==3.7
 importlib_resources==6.4.0
@@ -36,6 +36,7 @@ orbax-checkpoint==0.5.11
 packaging==24.0
 platformdirs==4.2.1
 protobuf==5.26.1
+psutil==5.9.8
 PyArabic==0.6.15
 Pygments==2.18.0
 PyYAML==6.0.1
