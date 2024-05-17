@@ -37,12 +37,16 @@ def analyze_sentence(sentence):
 @app.route('/', methods=['GET'])
 def sentiment_analysis():
     query_params = request.args
+    print("argument",query_params)
     request_text = query_params.get("text")
+    print("stop 1")
     if not request_text:
         return jsonify({'error': 'No text provided'}), 400
-
     word_sentiments = analyze_sentence(request_text)
+    print("stop 2, after word_sentiments")
+
     labels_line = ' '.join(sentiment['label'] for _, sentiment in word_sentiments)
+    print("stop 3")
     return jsonify({'labels': labels_line}), 200
 
 if __name__ == '__main__':
