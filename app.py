@@ -10,7 +10,7 @@ model_path = "Dhalati707/FlaskModel"
 tokenizer_path = "./tokenizer"
 
 tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
-model = AutoModelForSequenceClassification.from_pretrained(model_path)
+model = AutoModelForSequenceClassification.from_pretrained(model_path,low_cpu_mem_usage=True)
 
 nlp = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer)
 
