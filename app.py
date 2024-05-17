@@ -9,8 +9,9 @@ app = Flask(__name__)
 model_path = "Dhalati707/FlaskModel"
 tokenizer_path = "./tokenizer"
 
-tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
+tokenizer = AutoTokenizer.from_pretrained(tokenizer_path,low_cpu_mem_usage=True)
 model = AutoModelForSequenceClassification.from_pretrained(model_path,low_cpu_mem_usage=True)
+
 
 nlp = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer)
 
@@ -34,24 +35,21 @@ def analyze_sentence(sentence):
     word_sentiments = [(word, sentiment) for word, sentiment in zip(base_sentence.split(), sentiments) if word not in prepositions]
     return word_sentiments
 
-@app.route('/', methods=['GET','POST'])
+@app.route('/', methods=['GET'])
 def sentiment_analysis():
-    if request.method == "GET":
-          return jsonify({"success":"successful"}),200
-    else:
-      if request.is_json:
-          json_data = request.json
+    query_params = request.args
+    print("argument",query_params)
 
-          if 'text' in json_data:    
-            request_text = json_data["text"]
-            print("JSON data:", json_data)
-      
-      word_sentiments = analyze_sentence(request_text)
-      print("stop 2, after word_sentiments")
+    request_text = query_params.get("text")
+    print("stop 1")
+    if not request_text:
+        return jsonify({'error': 'No text provided'}), 400
+    word_sentiments = analyze_sentence(request_text)
+    print("stop 2, after word_sentiments")
 
-      labels_line = ' '.join(sentiment['label'] for _, sentiment in word_sentiments)
-      print("stop 3")
-      return jsonify({'labels': labels_line}), 200
+    labels_line = ' '.join(sentiment['label'] for _, sentiment in word_sentiments)
+    print("stop 3")
+    return jsonify({'labels': labels_line}), 200
 
 if __name__ == '__main__':
     app.run(debug=False)
