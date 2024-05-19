@@ -29,11 +29,44 @@ def remove_prefixes_suffixes(text):
         words.append(word)
     return " ".join(words)
 
+# def analyze_sentence(sentence):
+#     base_sentence = remove_prefixes_suffixes(sentence)
+#     sentiments = nlp(base_sentence)  # Process entire sentence at once
+#     word_sentiments = [(word, sentiment) for word, sentiment in zip(base_sentence.split(), sentiments) if word not in prepositions]
+#     return word_sentiments
+
 def analyze_sentence(sentence):
+    """
+    Performs sentiment analysis on a sentence after converting Arabic words to base form.
+    Args:
+        sentence (str): The Arabic sentence.
+    Returns:
+        list: A list of tuples containing (word, sentiment) for relevant words.
+    """
+
+    # Convert sentence to base form
     base_sentence = remove_prefixes_suffixes(sentence)
-    sentiments = nlp(base_sentence)  # Process entire sentence at once
-    word_sentiments = [(word, sentiment) for word, sentiment in zip(base_sentence.split(), sentiments) if word not in prepositions]
+
+    # Tokenize the base sentence into words
+    words = base_sentence.split()
+
+    # Initialize a list to store the sentiment of each relevant word
+    word_sentiments = []
+
+    # Process each word separately
+    for word in words:
+        # Ignore prepositions
+        if word in prepositions:
+            continue
+
+        # Perform sentiment analysis on the word
+        sentiment = nlp(word)[0]  # Extract the first (and only) element of the list
+
+        # Append the sentiment result to the list
+        word_sentiments.append((word, sentiment))
+
     return word_sentiments
+
 
 @app.route('/', methods=['GET'])
 def sentiment_analysis():
